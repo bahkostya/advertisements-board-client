@@ -28,10 +28,7 @@
                 "render"
             ],
         }],
-        "react/jsx-sort-props": [2, {
-            "callbacksLast": true,
-            "ignoreCase": true
-        }],
+        "react/jsx-sort-props": 0,
         "import/extensions": 0
     }
 }

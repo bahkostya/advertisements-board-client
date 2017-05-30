@@ -20,25 +20,25 @@ module.exports = {
                 exclude: /node_modules/,
                 use: ['react-hot-loader', 'babel-loader'],
             },
-            // {
-            //     test: /\.scss$/,
-            //     exclude: /node_modules/,
-            //     use: [
-            //         'style-loader',
-            //         'css-loader?modules&importLoaders=1&localIdentName=__[name]__[local]___[hash:base64:5]',
-            //         {
-            //             loader: 'postcss-loader',
-            //             options: {
-            //                 plugins() {
-            //                     return [
-            //                         require('autoprefixer')
-            //                     ];
-            //                 },
-            //             },
-            //         },
-            //         'sass-loader',
-            //     ],
-            // },
+            {
+                test: /\.scss$/,
+                exclude: /node_modules/,
+                use: [
+                    'style-loader',
+                    'css-loader?modules&importLoaders=1&localIdentName=__[name]__[local]___[hash:base64:5]',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins() {
+                                return [
+                                    require('autoprefixer')
+                                ];
+                            },
+                        },
+                    },
+                    'sass-loader',
+                ],
+            },
             {
                 test: /\.css$/,
                 use: [

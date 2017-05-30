@@ -2,7 +2,9 @@ import 'normalize.css';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { HashRouter, Switch, Route } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import App from './components/App.jsx';
 
@@ -10,17 +12,17 @@ import store from './store';
 
 import './assets/main.css';
 
-const routes = (
-    <Switch>
-        <Route component={App} exact path="/" />
-    </Switch>
-);
+
+injectTapEventPlugin();
+
 
 ReactDOM.render(
     <Provider store={store}>
-        <HashRouter>
-            {routes}
-        </HashRouter>
+        <MuiThemeProvider>
+            <HashRouter>
+                <App />
+            </HashRouter>
+        </MuiThemeProvider>
     </Provider>,
     document.getElementById('root'),
 );

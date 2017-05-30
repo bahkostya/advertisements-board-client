@@ -1,7 +1,10 @@
 import React from 'react';
 
-export default props => (
-    <div>
-        <h1>Advertisements board</h1>
-    </div>
+import Layout from './Layout.jsx';
+import Routes from './Routes.jsx';
+
+export default () => (
+    <Layout>
+        <Routes />
+    </Layout>
 );
