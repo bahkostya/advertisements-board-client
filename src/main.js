@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import App from './components/App.jsx';
@@ -11,9 +10,6 @@ import App from './components/App.jsx';
 import store from './store';
 
 import './assets/main.css';
-
-
-injectTapEventPlugin();
 
 
 ReactDOM.render(
