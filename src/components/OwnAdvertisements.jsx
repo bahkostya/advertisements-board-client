@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import Card from './Card.jsx';
 
-export default class Main extends Component {
+export default class OwnAdvertisements extends Component {
+    handleEdit = id => {
+        this.props.history.push(`/edit/${id}`);
+    }
+
     render() {
         const ads = [1, 2, 3, 4, 5];
 
@@ -25,6 +29,8 @@ export default class Main extends Component {
                                   laborum.`}
                             seller="Bob"
                             telephone="+380637131296"
+                            isOwner
+                            onEdit={this.handleEdit}
                         />
                     ))
                 }
