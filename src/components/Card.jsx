@@ -32,21 +32,6 @@ export default class AdvertisementForm extends Component {
                     actAsExpander
                     showExpandableButton
                 />
-                {
-                    isOwner &&
-                        <CardActions>
-                            <FlatButton
-                                label="Edit"
-                                onTouchTap={this.handleEdit}
-                                primary
-                            />
-                            <FlatButton
-                                label="Delete"
-                                onTouchTap={this.handleDelete}
-                                secondary
-                            />
-                        </CardActions>
-                }
                 <CardText expandable>
                     <div className={styles.subtitle}>Description</div>
                     {description}
@@ -65,6 +50,21 @@ export default class AdvertisementForm extends Component {
                             </div>
                     }
                 </CardText>
+                {
+                    isOwner &&
+                        <CardActions className={styles.actions}>
+                            <FlatButton
+                                label="Edit"
+                                onTouchTap={this.handleEdit}
+                                primary
+                            />
+                            <FlatButton
+                                label="Delete"
+                                onTouchTap={this.handleDelete}
+                                secondary
+                            />
+                        </CardActions>
+                }
             </Card>
         );
     }
