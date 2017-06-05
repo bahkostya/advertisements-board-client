@@ -11,3 +11,10 @@
     text-decoration: none;
     color: inherit;
 }
+
+.fetching {
+    composes: body;
+
+    align-items: center;
+    justify-content: center;
+}

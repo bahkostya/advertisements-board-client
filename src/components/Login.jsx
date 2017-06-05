@@ -1,34 +1,28 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { Tabs, Tab } from 'material-ui/Tabs';
 import TextField from 'material-ui/TextField';
+
+import { fetchLogin } from '../actions';
 
 
 const defaultState = {
     activeTab: 0,
     login: {
-        email: '',
-        password: '',
-    },
-    signUp: {
-        email: '',
-        password: '',
-        firstName: '',
-        lastName: '',
         telephone: '',
+        password: '',
     },
     errors: {
-        email: '',
-        password: '',
-        firstName: '',
-        lastName: '',
         telephone: '',
+        password: '',
+        message: '',
     },
 };
 
 @withRouter
+@connect(null, { fetchLogin })
 export default class AdvertisementForm extends Component {
     state = { ...defaultState }
 
@@ -38,41 +32,16 @@ export default class AdvertisementForm extends Component {
         });
     }
 
-    handleChangeTab = value => {
-        this.setState({
-            activeTab: value,
-            login: {
-                email: '',
-                password: '',
-            },
-            signUp: {
-                email: '',
-                password: '',
-                firstName: '',
-                lastName: '',
-                telephone: '',
-            },
-            errors: {
-                email: '',
-                password: '',
-                firstName: '',
-                lastName: '',
-                telephone: '',
-            },
-        });
-    };
-
     handleClose = () => {
         this.props.onClose();
     }
 
     handleChange = e => {
         const { name, value } = e.target;
-        const tab = this.state.activeTab ? 'signUp' : 'login';
 
         this.setState({
-            [tab]: {
-                ...this.state[tab],
+            login: {
+                ...this.state.login,
                 [name]: value,
             },
             errors: {
@@ -82,15 +51,13 @@ export default class AdvertisementForm extends Component {
         });
     }
 
-    handleLogin = () => {
-        const tab = this.state.activeTab ? this.state.signUp : this.state.login;
+    handleLogin = async () => {
         let hasError = false;
         const errors = {};
-        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
         const telephoneRegex = /^\+[0-9]{12}$/;
 
-        Object.keys(tab).forEach(key => {
-            if (tab[key] === '') {
+        Object.keys(this.state.login).forEach(key => {
+            if (this.state.login[key] === '') {
                 hasError = true;
                 errors[key] = `Please enter ${key}.`;
             } else {
@@ -98,13 +65,8 @@ export default class AdvertisementForm extends Component {
             }
         });
 
-        if (!emailRegex.test(tab.email)) {
-            hasError = true;
-            errors.email = 'Please enter correct email';
-        }
-
-        if (Object.prototype.hasOwnProperty.call(tab, 'telephone') &&
-            !telephoneRegex.test(tab.telephone)) {
+        if (Object.prototype.hasOwnProperty.call(this.state.login, 'telephone') &&
+            !telephoneRegex.test(this.state.login.telephone)) {
             hasError = true;
             errors.telephone = 'Please enter correct telephone number';
         }
@@ -114,8 +76,20 @@ export default class AdvertisementForm extends Component {
         });
 
         if (!hasError) {
-            this.handleClose();
-            this.props.history.push('/my');
+            const { telephone, password } = this.state.login;
+            const loginResponse = await this.props.fetchLogin(telephone, password);
+
+            if (loginResponse) {
+                this.handleClose();
+                this.props.history.push('/my');
+            } else {
+                this.setState({
+                    errors: {
+                        ...this.state.errors,
+                        message: true,
+                    },
+                });
+            }
         }
     }
 
@@ -123,8 +97,6 @@ export default class AdvertisementForm extends Component {
         const {
             errors,
             login,
-            signUp,
-            activeTab,
         } = this.state;
 
         const actions = [
@@ -143,101 +115,48 @@ export default class AdvertisementForm extends Component {
 
         return (
             <Dialog
+                title="LOGIN"
                 actions={actions}
                 modal={false}
                 open={this.props.open}
                 onRequestClose={this.handleClose}
-                bodyStyle={{ padding: 0 }}
                 contentStyle={{ maxWidth: 600 }}
                 repositionOnUpdate
                 autoDetectWindowHeight
             >
-                <Tabs
-                    onChange={this.handleChangeTab}
-                    value={activeTab}
-                    tabTemplateStyle={{ padding: '0 36px 8px' }}
-                >
-                    <Tab
-                        label="Login"
-                        value={0}
+                <TextField
+                    hintText="+ 00 000 000 00 00"
+                    floatingLabelText="Telephone number"
+                    fullWidth
+                    name="telephone"
+                    type="tel"
+                    errorText={errors.telephone}
+                    value={login.telephone}
+                    onChange={this.handleChange}
+                />
+                <TextField
+                    hintText="Enter your password here"
+                    floatingLabelText="Password"
+                    fullWidth
+                    name="password"
+                    type="password"
+                    errorText={errors.password}
+                    value={login.password}
+                    onChange={this.handleChange}
+                />
+                {
+                    errors.message &&
+                    <div
+                        style={{
+                            bottom: 15,
+                            fontSize: 12,
+                            lineHeight: '24px',
+                            color: 'rgb(244, 67, 54)',
+                        }}
                     >
-                        <TextField
-                            hintText="Enter your email here"
-                            floatingLabelText="Email"
-                            fullWidth
-                            name="email"
-                            type="email"
-                            errorText={errors.email}
-                            value={login.email}
-                            onChange={this.handleChange}
-                        />
-                        <TextField
-                            hintText="Enter your password here"
-                            floatingLabelText="Password"
-                            fullWidth
-                            name="password"
-                            type="password"
-                            errorText={errors.password}
-                            value={login.password}
-                            onChange={this.handleChange}
-                        />
-                    </Tab>
-                    <Tab
-                        label="Sign up"
-                        value={1}
-                    >
-                        <TextField
-                            hintText="Enter your email here"
-                            floatingLabelText="Email"
-                            fullWidth
-                            name="email"
-                            type="email"
-                            errorText={errors.email}
-                            value={signUp.email}
-                            onChange={this.handleChange}
-                        />
-                        <TextField
-                            hintText="Enter your password here"
-                            floatingLabelText="Password"
-                            fullWidth
-                            name="password"
-                            type="password"
-                            errorText={errors.password}
-                            value={signUp.password}
-                            onChange={this.handleChange}
-                        />
-                        <TextField
-                            hintText="Enter your first name"
-                            floatingLabelText="First name"
-                            fullWidth
-                            name="firstName"
-                            type="text"
-                            errorText={errors.firstName}
-                            value={signUp.firstName}
-                            onChange={this.handleChange}
-                        />
-                        <TextField
-                            hintText="Enter your last name"
-                            floatingLabelText="lastName"
-                            fullWidth
-                            name="lastName"
-                            type="text"
-                            errorText={errors.lastName}
-                            value={signUp.lastName}
-                            onChange={this.handleChange}
-                        />
-                        <TextField
-                            hintText="+ 00 000 000 00 00"
-                            floatingLabelText="Telephone number"
-                            fullWidth
-                            name="telephone"
-                            type="tel"
-                            errorText={errors.telephone}
-                            value={signUp.telephone}
-                            onChange={this.handleChange}
-                        />
-                    </Tab>
-                </Tabs>
+                        Telephone or password is incorrect!
+                    </div>
+                }
             </Dialog>
         );
     }
