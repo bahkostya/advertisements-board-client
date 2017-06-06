@@ -97,10 +97,82 @@ async function getMyAdvertisements() {
     return response.json();
 }
 
+async function publishAdvertisement(name, price, description) {
+    const newAdvertisement = {
+        name,
+        price,
+        description,
+        location: 'KIEV',
+    };
+
+    const fetchOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(newAdvertisement),
+    };
+
+    const response = await fetch(
+        `${API_PREFIX}/secured`,
+        fetchOptions,
+    );
+
+    return response.json();
+}
+
+async function deleteAdvertisement(id) {
+    const fetchOptions = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    };
+
+    const response = await fetch(
+        `${API_PREFIX}/secured/${id}`,
+        fetchOptions,
+    );
+
+    return response.json();
+}
+
+
+async function updateAdvertisement(id, name, price, description) {
+    const newAdvertisement = {
+        id,
+        name,
+        price,
+        description,
+        location: 'KIEV',
+    };
+
+    const fetchOptions = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(newAdvertisement),
+    };
+
+    const response = await fetch(
+        `${API_PREFIX}/secured`,
+        fetchOptions,
+    );
+
+    return response.json();
+}
+
 export default {
     getAllAdvertisements,
     login,
     logout,
     getAdvertisementById,
     getMyAdvertisements,
+    publishAdvertisement,
+    deleteAdvertisement,
+    updateAdvertisement,
 };

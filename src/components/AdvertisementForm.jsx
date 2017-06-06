@@ -58,7 +58,6 @@ export default class AdvertisementForm extends Component {
 
         if (!hasError) {
             this.props.onPublish(inputs);
-            console.log('PUBLISHED', inputs);
         }
     }
 

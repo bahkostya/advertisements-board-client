@@ -104,3 +104,61 @@ export const fetchMyAdvertisements = () => async dispatch => {
         await dispatch(fetchMyAdvertisementsSuccess(allAdvertisements));
     }
 };
+
+export const FETCH_PUBLISH_ADVERTISEMET_REQUEST = 'FETCH_PUBLISH_ADVERTISEMET_REQUEST';
+export const FETCH_PUBLISH_ADVERTISEMET_SUCCESS = 'FETCH_PUBLISH_ADVERTISEMET_SUCCESS';
+
+export const fetchPublishAdvertisementRequest = () => ({
+    type: FETCH_PUBLISH_ADVERTISEMET_REQUEST,
+});
+
+export const fetchPublishAdvertisementSuccess = data => ({
+    type: FETCH_PUBLISH_ADVERTISEMET_SUCCESS,
+    data,
+});
+
+export const fetchPublishAdvertisement = (title, price, description) => async dispatch => {
+    await dispatch(fetchPublishAdvertisementRequest());
+
+    const res = await api.publishAdvertisement(title, price, description);
+
+    if (!Object.hasOwnProperty.call(res, 'error')) {
+        await dispatch(fetchPublishAdvertisementSuccess(res));
+    }
+
+    return res;
+};
+
+export const FETCH_DELETE_ADVERTISEMET_SUCCESS = 'FETCH_DELETE_ADVERTISEMET_SUCCESS';
+
+export const fetchDeleteAdvertisementSuccess = id => ({
+    type: FETCH_DELETE_ADVERTISEMET_SUCCESS,
+    id,
+});
+
+export const fetchDeleteAdvertisement = id => async dispatch => {
+    const res = await api.deleteAdvertisement(id);
+
+    if (!Object.hasOwnProperty.call(res, 'error')) {
+        await dispatch(fetchDeleteAdvertisementSuccess(id));
+    }
+
+    return res;
+};
+
+export const FETCH_EDIT_ADVERTISEMET_SUCCESS = 'FETCH_EDIT_ADVERTISEMET_SUCCESS';
+
+export const fetchEditAdvertisementSuccess = data => ({
+    type: FETCH_EDIT_ADVERTISEMET_SUCCESS,
+    data,
+});
+
+export const fetchEditAdvertisement = (id, title, price, description) => async dispatch => {
+    const res = await api.updateAdvertisement(id, title, price, description);
+
+    if (!Object.hasOwnProperty.call(res, 'error')) {
+        await dispatch(fetchEditAdvertisementSuccess(res));
+    }
+
+    return res;
+};

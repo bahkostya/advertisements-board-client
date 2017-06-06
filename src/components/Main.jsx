@@ -27,8 +27,8 @@ export default class Main extends Component {
                             title={ad.name}
                             price={ad.price}
                             description={ad.description}
-                            seller="Bob"
-                            telephone="+380637131296"
+                            seller={`${ad.user.name} ${ad.user.surname}`}
+                            telephone={ad.user.phone}
                         />
                     ))
                 }

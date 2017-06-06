@@ -4,6 +4,7 @@ import {
     FETCH_OWN_ADVERTISEMETS_REQUEST,
     FETCH_OWN_ADVERTISEMETS_SUCCESS,
     FETCH_LOGOUT_SUCCESS,
+    FETCH_DELETE_ADVERTISEMET_SUCCESS,
 } from '../actions';
 
 export default function (state = {
@@ -34,6 +35,11 @@ export default function (state = {
             return {
                 ...state,
                 ownData: [],
+            };
+        case FETCH_DELETE_ADVERTISEMET_SUCCESS:
+            return {
+                ...state,
+                ownData: state.ownData.filter(ad => ad.id !== +action.id),
             };
         default:
             return state;

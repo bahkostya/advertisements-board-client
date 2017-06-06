@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import Card from './Card.jsx';
-import { fetchMyAdvertisements } from '../actions';
+import { fetchMyAdvertisements, fetchDeleteAdvertisement } from '../actions';
 
 
 function mapStateToProps(state) {
     return {
         advertisements: state.advertisements.ownData,
+        isLoggedIn: state.user.isLoggedIn,
     };
 }
 
-@connect(mapStateToProps, { fetchMyAdvertisements })
+@withRouter
+@connect(mapStateToProps, { fetchMyAdvertisements, fetchDeleteAdvertisement })
 export default class OwnAdvertisements extends Component {
     componentDidMount() {
-        this.props.fetchMyAdvertisements();
+        if (this.props.isLoggedIn) {
+            this.props.fetchMyAdvertisements();
+        }
+    }
+
+    handleDelete = id => {
+        this.props.fetchDeleteAdvertisement(id);
     }
 
     handleEdit = id => {
@@ -21,6 +31,10 @@ export default class OwnAdvertisements extends Component {
     }
 
     render() {
+        if (!this.props.isLoggedIn) {
+            return <Redirect to="/all" />;
+        }
+
         return (
             <div style={{ flex: '1 1 100%' }}>
                 {
@@ -35,6 +49,7 @@ export default class OwnAdvertisements extends Component {
                             telephone="+380637131296"
                             isOwner
                             onEdit={this.handleEdit}
+                            onDelete={this.handleDelete}
                         />
                     ))
                 }
