@@ -1,0 +1,20 @@
+.body {
+    background-color: #f3f3f3;
+    display: flex;
+    position: relative;
+    min-height: calc(100vh - 64px);
+    padding: 24px 24px 24px 274px;
+    align-items: flex-start;
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.fetching {
+    composes: body;
+
+    align-items: center;
+    justify-content: center;
+}
